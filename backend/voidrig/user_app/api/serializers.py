@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from user_app.models import Invite
 
 # Registration Serialiser
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -35,3 +36,20 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.save()
         
         return account
+    
+# Invite Serializer
+class InviteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invite
+        fields = "__all__"
+        
+    def save(self):
+        code = self.validated_data["invitecode"]
+        # check for existing codes
+        if Invite.objects.filter(invitecode=code).exists():
+            raise serializers.ValidationError({"Error":"Same Generated Invite Code Alrady Exist!"})
+        else:
+            d = Invite(invitecode= code)      
+            d.save()
+            
+            return d;  
