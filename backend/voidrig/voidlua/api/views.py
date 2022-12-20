@@ -11,7 +11,7 @@ class LuaListView(generics.ListAPIView):
     queryset = Lua.objects.all()
     serializer_class = LuaSerializer
     
-    
+
 # Specific luas (CRUD)
 class LuaView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOfLua]
